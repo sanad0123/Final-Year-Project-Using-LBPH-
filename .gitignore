@@ -1,4 +1,4 @@
 # we ignore files that are not required to push in git through this file
 
 venv
-
+timesheet.txt
