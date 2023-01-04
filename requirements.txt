@@ -1,0 +1,7 @@
+#python version 3.11.0 used
+
+#packages list
+
+tk == 0.1.0
+pillow == 9.3.0
+
