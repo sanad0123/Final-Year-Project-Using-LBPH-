@@ -1,5 +1,5 @@
-:: We run this batch command to activate venv and install all required packages listed on requirements.txt
+:: We run this batch command to activate venv 
 
 .\venv\Scripts\activate
-pip install -r requirements.txt
+
 
