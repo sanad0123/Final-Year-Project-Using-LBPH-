@@ -21,6 +21,7 @@ class Student :  #defining class
         self.screen_height_str = str(self.screen_height) #get the screen height in string
         self.root.geometry(self.screen_width_str + "x" + self.screen_height_str + "+0" + "+0")  #setting up areaofwindow + xorigin + yorigin of window
         self.root.title("Smart Attendance System")   #setting title of the window
+        
 
         # for responsive design
         self.one_tenth_screen_height = int(self.screen_height/10)    #1/10 of screen height
@@ -142,7 +143,7 @@ class Student :  #defining class
         ypos_sem_label = one_hundredth_course_height*60
         sem_label_height = one_hundredth_course_height*40
         sem_label_width = one_hundredth_course_width*24
-        sem_label = Label(course_frame,text="Courses : ",font=("times new roman",12,"bold"))
+        sem_label = Label(course_frame,text="Semester : ",font=("times new roman",12,"bold"))
         sem_label.place(x=xpos_sem_label,y=ypos_sem_label,width=sem_label_width,height=sem_label_height)
 
         #Semester select box
@@ -160,15 +161,107 @@ class Student :  #defining class
         #Student info
 
         stuinfo_frame_width = one_hundredth_left_frame_width*98
-        stuinfo_frame_height = one_hundredth_left_frame_height*59
+        stuinfo_frame_height = one_hundredth_left_frame_height*60
         xpos_stuinfo_frame = one_hundredth_left_frame_width*2
         ypos_stuinfo_frame = one_hundredth_left_frame_height*31
         stuinfo_frame = LabelFrame(left_frame,bd=2,relief=RIDGE,text="Student Details",font=("times new roman",12,"bold"))
         stuinfo_frame.place(x=xpos_stuinfo_frame,y=ypos_stuinfo_frame,width=stuinfo_frame_width,height=stuinfo_frame_height)
+        stuinfo_frame.columnconfigure(index=0,weight=1)
+        stuinfo_frame.columnconfigure(index=1,weight=1)
+        stuinfo_frame.columnconfigure(index=2,weight=1)
+        stuinfo_frame.columnconfigure(index=3,weight=1)
+        stuinfo_frame.rowconfigure(index=0,weight=1)
+        stuinfo_frame.rowconfigure(index=1,weight=1)
+        stuinfo_frame.rowconfigure(index=2,weight=1)
+        stuinfo_frame.rowconfigure(index=3,weight=1)
+        stuinfo_frame.rowconfigure(index=4,weight=1)
+        stuinfo_frame.rowconfigure(index=5,weight=1)
 
         
         one_hundredth_stuinfo_width = math.floor(stuinfo_frame_width/100)
         one_hundredth_stuinfo_height = math.floor(stuinfo_frame_height/100)
+
+        
+
+
+        #student id label
+        stu_entry_width = one_hundredth_stuinfo_width*25
+        stu_id_label = Label(stuinfo_frame,text="Student ID No. : ",font=("times new roman",12,"bold"))
+        stu_id_label.grid(row=0,column=0,sticky=EW)
+
+        stu_id_entry = ttk.Entry(stuinfo_frame,width=20,font=("times new roman",12,"bold"))
+        stu_id_entry.grid(row=0,column=1,sticky=W)
+
+        stu_name_label = Label(stuinfo_frame,text="Student Name : ",font=("times new roman",12,"bold"))
+        stu_name_label.grid(row=0,column=2,sticky=EW)
+
+        stu_name_entry = ttk.Entry(stuinfo_frame,width=20,font=("times new roman",12,"bold"))
+        stu_name_entry.grid(row=0,column=3,sticky=W)
+
+        stu_section_label = Label(stuinfo_frame,text="Sections : ",font=("times new roman",12,"bold"))
+        stu_section_label.grid(row=1,column=0,sticky=EW)
+
+        stu_section_combo = ttk.Combobox(stuinfo_frame,font=("times new roman",12,"bold"),state="readonly")
+        stu_section_combo["values"] = ("Select Sections","A","B","C")
+        stu_section_combo.current(0)
+        stu_section_combo.grid(row=1,column=1,sticky=W)
+
+        stu_roll_label = Label(stuinfo_frame,text="Roll No. : ",font=("times new roman",12,"bold"))
+        stu_roll_label.grid(row=1,column=2,sticky=EW)
+
+        stu_roll_entry = ttk.Entry(stuinfo_frame,width=20,font=("times new roman",12,"bold"))
+        stu_roll_entry.grid(row=1,column=3,sticky=W)
+
+        stu_gender_label = Label(stuinfo_frame,text="Gender : ",font=("times new roman",12,"bold"))
+        stu_gender_label.grid(row=2,column=0)
+
+        stu_gender_combo = ttk.Combobox(stuinfo_frame,font=("times new roman",12,"bold"),state="readonly")
+        stu_gender_combo["values"] = ("Select Gender","Male","Female")
+        stu_gender_combo.current(0)
+        stu_gender_combo.grid(row=2,column=1,sticky=W)
+
+        stu_dob_label = Label(stuinfo_frame,text="DOB : ",font=("times new roman",12,"bold"))
+        stu_dob_label.grid(row=2,column=2,sticky=EW)
+
+        stu_dob_entry = ttk.Entry(stuinfo_frame,width=20,font=("times new roman",12,"bold"))
+        stu_dob_entry.grid(row=2,column=3,sticky=W)
+
+        stu_email_label = Label(stuinfo_frame,text="Email : ",font=("times new roman",12,"bold"))
+        stu_email_label.grid(row=3,column=0,sticky=EW)
+
+        stu_email_entry = ttk.Entry(stuinfo_frame,width=20,font=("times new roman",12,"bold"))
+        stu_email_entry.grid(row=3,column=1,sticky=W)
+
+        stu_phone_label = Label(stuinfo_frame,text="Phone : ",font=("times new roman",12,"bold"))
+        stu_phone_label.grid(row=3,column=2,sticky=EW)
+
+        stu_phone_entry = ttk.Entry(stuinfo_frame,width=20,font=("times new roman",12,"bold"))
+        stu_phone_entry.grid(row=3,column=3,sticky=W)
+
+        stu_address_label = Label(stuinfo_frame,text="Address : ",font=("times new roman",12,"bold"))
+        stu_address_label.grid(row=4,column=0,sticky=EW)
+
+        stu_address_entry = ttk.Entry(stuinfo_frame,width=20,font=("times new roman",12,"bold"))
+        stu_address_entry.grid(row=4,column=1,sticky=W)
+
+        stu_teacher_label = Label(stuinfo_frame,text="Teacher Name : ",font=("times new roman",12,"bold"))
+        stu_teacher_label.grid(row=4,column=2,sticky=EW)
+
+        stu_teacher_entry = ttk.Entry(stuinfo_frame,width=20,font=("times new roman",12,"bold"))
+        stu_teacher_entry.grid(row=4,column=3,sticky=W)
+
+        radiobtn1 = ttk.Radiobutton(stuinfo_frame,text="Take photo Sample",value=1)
+        radiobtn1.grid(row=5,column=0,columnspan=2)
+
+        radiobtn2 = ttk.Radiobutton(stuinfo_frame,text="No photo Sample",value=0)
+        radiobtn2.grid(row=5,column=2,columnspan=2)
+
+
+
+
+       
+        
+        
 
 
 
@@ -185,7 +278,7 @@ class Student :  #defining class
 
         button_label_1 = Button(left_frame,image=self.button1,cursor="hand2",bd=0)
         button1_xpos = one_hundredth_left_frame_width*2
-        button1_ypos = one_hundredth_left_frame_height*91
+        button1_ypos = one_hundredth_left_frame_height*92
         button_label_1.place(x=button1_xpos,y=button1_ypos,width=button_width,height=button_height)
 
         #button_5
@@ -196,7 +289,7 @@ class Student :  #defining class
 
         button_label_5 = Button(left_frame,image=self.button1,cursor="hand2",bd=0)
         button1_xpos = one_hundredth_left_frame_width*2
-        button1_ypos = one_hundredth_left_frame_height*101
+        button1_ypos = one_hundredth_left_frame_height*102
         button_label_5.place(x=button1_xpos,y=button1_ypos,width=button_width,height=button_height)
 
 
