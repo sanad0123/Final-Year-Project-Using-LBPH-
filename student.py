@@ -3,6 +3,7 @@ from tkinter import ttk  #importing tkinter package
 from PIL import Image, ImageTk  #importing Pillow package
 import os #importing os package
 import math
+import project_standard as ps
 
 
 
@@ -59,7 +60,7 @@ class Student :  #defining class
         left_frame_width = self.one_hundredth_screen_width*48
         left_frame_height = self.one_hundredth_background_height*98
 
-        left_frame = LabelFrame(b_lbl,bd=2,relief=RIDGE,text="Student Details",font=("times new roman",16,"bold"))
+        left_frame = LabelFrame(b_lbl,bd=5,relief=RIDGE,text="Student Details",font=("times new roman",16,"bold"),bg=ps.theme_color)
         left_frame.place(x=xpos_left_frame,y=ypos_left_frame,width=left_frame_width,height=left_frame_height)
 
         #Course info
@@ -68,11 +69,140 @@ class Student :  #defining class
         one_hundredth_left_frame_height = math.floor(left_frame_height/100)
 
         course_frame_width = one_hundredth_left_frame_width*98
-        course_frame_height = one_hundredth_left_frame_height*30
+        course_frame_height = one_hundredth_left_frame_height*29
         xpos_course_frame = one_hundredth_left_frame_width*2
-        ypos_course_frame = one_hundredth_left_frame_height*20
+        ypos_course_frame = one_hundredth_left_frame_height
         course_frame = LabelFrame(left_frame,bd=2,relief=RIDGE,text="Course Details",font=("times new roman",12,"bold"))
         course_frame.place(x=xpos_course_frame,y=ypos_course_frame,width=course_frame_width,height=course_frame_height)
+
+        
+        one_hundredth_course_width = math.floor(course_frame_width/100)
+        one_hundredth_course_height = math.floor(course_frame_height/100)
+
+        #Department label
+        xpos_dep_label = one_hundredth_course_width
+        ypos_dep_label = one_hundredth_course_height*10
+        dep_label_height = one_hundredth_course_height*40
+        dep_label_width = one_hundredth_course_width*24
+        dep_label = Label(course_frame,text="Department : ",font=("times new roman",12,"bold"))
+        dep_label.place(x=xpos_dep_label,y=ypos_dep_label,width=dep_label_width,height=dep_label_height)
+
+        #Department select box
+        xpos_dep_combo = dep_label_width+xpos_dep_label
+        ypos_dep_combo = one_hundredth_course_height*10
+        dep_combo_height = one_hundredth_course_height*40
+        dep_combo_width = one_hundredth_course_width*25
+
+        dep_combo = ttk.Combobox(course_frame,font=("times new roman",12,"bold"),state="readonly")
+        dep_combo["values"] = ("Select Department","CSIT","BCA")
+        dep_combo.current(0)
+        dep_combo.place(x=xpos_dep_combo,y=ypos_dep_combo,width=dep_combo_width, height=dep_combo_height)
+
+        #Course label
+        xpos_course_label = one_hundredth_course_width*51
+        ypos_course_label = one_hundredth_course_height*10
+        course_label_height = one_hundredth_course_height*40
+        course_label_width = one_hundredth_course_width*24
+        course_label = Label(course_frame,text="Courses : ",font=("times new roman",12,"bold"))
+        course_label.place(x=xpos_course_label,y=ypos_course_label,width=course_label_width,height=course_label_height)
+
+        #Course select box
+        xpos_course_combo = one_hundredth_course_width*76
+        ypos_course_combo = one_hundredth_course_height*10
+        course_combo_height = one_hundredth_course_height*40
+        course_combo_width = one_hundredth_course_width*24
+
+        course_combo = ttk.Combobox(course_frame,font=("times new roman",12,"bold"),state="readonly")
+        course_combo["values"] = ("Select Courses","Data mining","IR","Java")
+        course_combo.current(0)
+        course_combo.place(x=xpos_course_combo,y=ypos_course_combo,width=course_combo_width, height=course_combo_height)
+
+        #Year label
+        xpos_year_label = one_hundredth_course_width
+        ypos_year_label = one_hundredth_course_height*60
+        year_label_height = one_hundredth_course_height*40
+        year_label_width = one_hundredth_course_width*24
+        year_label = Label(course_frame,text="Years : ",font=("times new roman",12,"bold"))
+        year_label.place(x=xpos_year_label,y=ypos_year_label,width=year_label_width,height=year_label_height)
+
+        #Year select box
+        xpos_year_combo = year_label_width+xpos_year_label
+        ypos_year_combo = one_hundredth_course_height*60
+        year_combo_height = one_hundredth_course_height*40
+        year_combo_width = one_hundredth_course_width*25
+
+        year_combo = ttk.Combobox(course_frame,font=("times new roman",12,"bold"),state="readonly")
+        year_combo["values"] = ("Select Years","2075","2076")
+        year_combo.current(0)
+        year_combo.place(x=xpos_year_combo,y=ypos_year_combo,width=year_combo_width, height=year_combo_height)
+
+
+        #Semester label
+        xpos_sem_label = one_hundredth_course_width*51
+        ypos_sem_label = one_hundredth_course_height*60
+        sem_label_height = one_hundredth_course_height*40
+        sem_label_width = one_hundredth_course_width*24
+        sem_label = Label(course_frame,text="Courses : ",font=("times new roman",12,"bold"))
+        sem_label.place(x=xpos_sem_label,y=ypos_sem_label,width=sem_label_width,height=sem_label_height)
+
+        #Semester select box
+        xpos_sem_combo = one_hundredth_course_width*76
+        ypos_sem_combo = one_hundredth_course_height*60
+        sem_combo_height = one_hundredth_course_height*40
+        sem_combo_width = one_hundredth_course_width*24
+
+        sem_combo = ttk.Combobox(course_frame,font=("times new roman",12,"bold"),state="readonly")
+        sem_combo["values"] = ("Select Semester","First","Second","Third","Fourth","Sixth","Seventh","Eighth")
+        sem_combo.current(0)
+        sem_combo.place(x=xpos_sem_combo,y=ypos_sem_combo,width=sem_combo_width, height=sem_combo_height)
+
+
+        #Student info
+
+        stuinfo_frame_width = one_hundredth_left_frame_width*98
+        stuinfo_frame_height = one_hundredth_left_frame_height*59
+        xpos_stuinfo_frame = one_hundredth_left_frame_width*2
+        ypos_stuinfo_frame = one_hundredth_left_frame_height*31
+        stuinfo_frame = LabelFrame(left_frame,bd=2,relief=RIDGE,text="Student Details",font=("times new roman",12,"bold"))
+        stuinfo_frame.place(x=xpos_stuinfo_frame,y=ypos_stuinfo_frame,width=stuinfo_frame_width,height=stuinfo_frame_height)
+
+        
+        one_hundredth_stuinfo_width = math.floor(stuinfo_frame_width/100)
+        one_hundredth_stuinfo_height = math.floor(stuinfo_frame_height/100)
+
+
+
+        #Button section of left frame
+
+        button_width = one_hundredth_left_frame_width*23
+        button_height = one_hundredth_left_frame_height*9
+
+        #button_1
+        button1_img_path = IMG_DIR + "/button.png"
+        button1 = Image.open(button1_img_path)
+        button1 = button1.resize((button_width,button_height),Image.Resampling.LANCZOS)
+        self.button1 = ImageTk.PhotoImage(button1)
+
+        button_label_1 = Button(left_frame,image=self.button1,cursor="hand2",bd=0)
+        button1_xpos = one_hundredth_left_frame_width*2
+        button1_ypos = one_hundredth_left_frame_height*91
+        button_label_1.place(x=button1_xpos,y=button1_ypos,width=button_width,height=button_height)
+
+        #button_5
+        button5_img_path = IMG_DIR + "/button.png"
+        button5 = Image.open(button5_img_path)
+        button5 = button5.resize((button_width,button_height),Image.Resampling.LANCZOS)
+        self.button5 = ImageTk.PhotoImage(button5)
+
+        button_label_5 = Button(left_frame,image=self.button1,cursor="hand2",bd=0)
+        button1_xpos = one_hundredth_left_frame_width*2
+        button1_ypos = one_hundredth_left_frame_height*101
+        button_label_5.place(x=button1_xpos,y=button1_ypos,width=button_width,height=button_height)
+
+
+
+
+
 
 
         # right label frame
@@ -84,7 +214,7 @@ class Student :  #defining class
         right_frame_width = self.one_hundredth_screen_width*48
         right_frame_height = self.one_hundredth_background_height*98
 
-        right_frame = LabelFrame(b_lbl,bd=2,relief=RIDGE,text="Student Details",font=("times new roman",16,"bold"))
+        right_frame = LabelFrame(b_lbl,bd=5,relief=RIDGE,text="Student Details",font=("times new roman",16,"bold"))
         right_frame.place(x=xpos_right_frame,y=ypos_right_frame,width=right_frame_width,height=right_frame_height)
 
         #
