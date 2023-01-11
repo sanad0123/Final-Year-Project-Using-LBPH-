@@ -2,6 +2,7 @@ from tkinter import*
 from tkinter import ttk  #importing tkinter package
 from PIL import Image, ImageTk  #importing Pillow package
 import os #importing os package
+import math
 
 
 
@@ -13,15 +14,15 @@ class Face_Recognition_System :  #defining class
     def __init__(self, root) :    #defining constructor
         self.root = root
         self.screen_width = self.root.winfo_screenwidth() #get the screen width
-        self.screen_width_str = str(self.root.winfo_screenwidth()) #get the screen width in string
-        self.screen_height = self.root.winfo_screenheight()-70 #get the screen height and we subtract 70 to eliminate the height of taskbar
-        self.screen_height_str = str(self.root.winfo_screenheight()-70) #get the screen height in string
+        self.screen_width_str = str(self.screen_width) #get the screen width in string
+        self.screen_height = self.root.winfo_screenheight()-60 #get the screen height and we subtract 70 to eliminate the height of taskbar
+        self.screen_height_str = str(self.screen_height) #get the screen height in string
         self.root.geometry(self.screen_width_str + "x" + self.screen_height_str + "+0" + "+0")  #setting up areaofwindow + xorigin + yorigin of window
         self.root.title("Smart Attendance System")   #setting title of the window
 
         # for responsive design
-        self.one_tenth_screen_height = int(self.screen_height/10)  #1/10 of screen height
-        self.one_tenth_screen_width = int(self.screen_width/10)   #1/10 of screen weidth
+        self.one_tenth_screen_height = math.floor(self.screen_height/10)  #1/10 of screen height
+        self.one_tenth_screen_width = math.floor(self.screen_width/10)   #1/10 of screen weidth
 
         # header section
 
