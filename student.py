@@ -281,16 +281,63 @@ class Student :  #defining class
         button1_ypos = one_hundredth_left_frame_height*92
         button_label_1.place(x=button1_xpos,y=button1_ypos,width=button_width,height=button_height)
 
+        #button_2
+        button2_img_path = IMG_DIR + "/button.png"
+        button2 = Image.open(button2_img_path)
+        button2 = button2.resize((button_width,button_height),Image.Resampling.LANCZOS)
+        self.button2 = ImageTk.PhotoImage(button2)
+
+        button_label_2 = Button(left_frame,image=self.button2,cursor="hand2",bd=0)
+        button2_xpos = one_hundredth_left_frame_width*27
+        button2_ypos = one_hundredth_left_frame_height*92
+        button_label_2.place(x=button2_xpos,y=button2_ypos,width=button_width,height=button_height)
+
+        #button_3
+        button3_img_path = IMG_DIR + "/button.png"
+        button3 = Image.open(button3_img_path)
+        button3 = button3.resize((button_width,button_height),Image.Resampling.LANCZOS)
+        self.button3 = ImageTk.PhotoImage(button3)
+
+        button_label_3 = Button(left_frame,image=self.button3,cursor="hand2",bd=0)
+        button3_xpos = one_hundredth_left_frame_width*52
+        button3_ypos = one_hundredth_left_frame_height*92
+        button_label_3.place(x=button3_xpos,y=button3_ypos,width=button_width,height=button_height)
+
+        #button_4
+        button4_img_path = IMG_DIR + "/button.png"
+        button4 = Image.open(button4_img_path)
+        button4 = button4.resize((button_width,button_height),Image.Resampling.LANCZOS)
+        self.button4 = ImageTk.PhotoImage(button4)
+
+        button_label_4 = Button(left_frame,image=self.button4,cursor="hand2",bd=0)
+        button4_xpos = one_hundredth_left_frame_width*77
+        button4_ypos = one_hundredth_left_frame_height*92
+        button_label_4.place(x=button4_xpos,y=button4_ypos,width=button_width,height=button_height)
+
+        #width of button 5 and button 6
+        lower_button_width =one_hundredth_left_frame_width*49
+
         #button_5
         button5_img_path = IMG_DIR + "/button.png"
         button5 = Image.open(button5_img_path)
-        button5 = button5.resize((button_width,button_height),Image.Resampling.LANCZOS)
+        button5 = button5.resize((lower_button_width,button_height),Image.Resampling.LANCZOS)
         self.button5 = ImageTk.PhotoImage(button5)
 
-        button_label_5 = Button(left_frame,image=self.button1,cursor="hand2",bd=0)
+        button_label_5 = Button(left_frame,image=self.button5,cursor="hand2",bd=0)
         button1_xpos = one_hundredth_left_frame_width*2
         button1_ypos = one_hundredth_left_frame_height*102
-        button_label_5.place(x=button1_xpos,y=button1_ypos,width=button_width,height=button_height)
+        button_label_5.place(x=button1_xpos,y=button1_ypos,width=lower_button_width,height=button_height)
+
+        #button_6
+        button6_img_path = IMG_DIR + "/button.png"
+        button6 = Image.open(button6_img_path)
+        button6 = button6.resize((lower_button_width,button_height),Image.Resampling.LANCZOS)
+        self.button6 = ImageTk.PhotoImage(button6)
+
+        button_label_6 = Button(left_frame,image=self.button6,cursor="hand2",bd=0)
+        button6_xpos = one_hundredth_left_frame_width*51
+        button6_ypos = one_hundredth_left_frame_height*102
+        button_label_6.place(x=button6_xpos,y=button6_ypos,width=lower_button_width,height=button_height)
 
 
 
@@ -307,10 +354,57 @@ class Student :  #defining class
         right_frame_width = self.one_hundredth_screen_width*48
         right_frame_height = self.one_hundredth_background_height*98
 
-        right_frame = LabelFrame(b_lbl,bd=5,relief=RIDGE,text="Student Details",font=("times new roman",16,"bold"))
+        right_frame = LabelFrame(b_lbl,bd=5,relief=RIDGE,text="Search For Students",font=("times new roman",16,"bold"),bg=ps.theme_color)
         right_frame.place(x=xpos_right_frame,y=ypos_right_frame,width=right_frame_width,height=right_frame_height)
+        right_frame.rowconfigure(index=0,weight=1)
+        right_frame.rowconfigure(index=1,weight=1)
+        right_frame.rowconfigure(index=2,weight=8)
+        right_frame.columnconfigure(index=0,weight=1)
+        right_frame.columnconfigure(index=1,weight=1)
+        right_frame.columnconfigure(index=2,weight=1)
+        right_frame.columnconfigure(index=3,weight=1)
+        right_frame.columnconfigure(index=4,weight=1)
 
-        #
+        one_hundredth_right_frame_height = math.floor(right_frame_height/100)
+        one_hundredth_right_frame_width = math.floor(right_frame_width/100)
+
+        #search by label
+        search_by_label = Label(right_frame,text="Search By ",font=("times new roman",12,"bold"),background=ps.theme_color)
+        search_by_label.grid(row=0,column=0,sticky=EW)
+
+        #search option
+        search_combo = ttk.Combobox(right_frame,font=("times new roman",12,"bold"),state="readonly")
+        search_combo["values"] = ("Select Options","Roll No.","Student ID no.","Student name")
+        search_combo.current(0)
+        search_combo.grid(row=0,column=1)
+
+        #search entry field
+        stu_search_entry = ttk.Entry(right_frame,width=18,font=("times new roman",12,"bold"))
+        stu_search_entry.grid(row=0,column=2)
+
+        #Search button
+        search_img_path = IMG_DIR + "/button.png"
+        search_button = Image.open(search_img_path)
+        search_button_height = one_hundredth_right_frame_height*5
+        search_button_width = one_hundredth_right_frame_width*20
+        search_button = search_button.resize((search_button_width,search_button_height),Image.Resampling.LANCZOS)
+        self.search_button = ImageTk.PhotoImage(search_button)
+
+        search_button_label = Button(right_frame,image=self.search_button,cursor="hand2",bd=0)
+        search_button_label.grid(row=0,column=3)
+
+
+        #Show all button
+        show_img_path = IMG_DIR + "/button.png"
+        show_button = Image.open(show_img_path)
+        show_button_height = one_hundredth_right_frame_height*5
+        show_button_width = one_hundredth_right_frame_width*20
+        show_button = show_button.resize((show_button_width,show_button_height),Image.Resampling.LANCZOS)
+        self.show_button = ImageTk.PhotoImage(show_button)
+
+        show_button_label = Button(right_frame,image=self.show_button,cursor="hand2",bd=0)
+        show_button_label.grid(row=0,column=4)
+        
 
 
 
