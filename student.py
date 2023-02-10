@@ -4,6 +4,8 @@ from PIL import Image, ImageTk  #importing Pillow package
 import os #importing os package
 import math
 import project_standard as ps
+from tkinter import messagebox
+import mysql.connector
 
 
 
@@ -21,6 +23,22 @@ class Student :  #defining class
         self.screen_height_str = str(self.screen_height) #get the screen height in string
         self.root.geometry(self.screen_width_str + "x" + self.screen_height_str + "+0" + "+0")  #setting up areaofwindow + xorigin + yorigin of window
         self.root.title("Smart Attendance System")   #setting title of the window
+
+        #====================variables===========================
+        self.var_dep = StringVar()
+        self.var_course = StringVar()
+        self.var_year = StringVar()
+        self.var_semester = StringVar()
+        self.var_std_id = StringVar()
+        self.var_std_name = StringVar()
+        self.var_sec = StringVar()
+        self.var_roll = StringVar()
+        self.var_gender = StringVar()
+        self.var_dob = StringVar()
+        self.var_email = StringVar()
+        self.var_phone = StringVar()
+        self.var_address = StringVar()
+        self.var_teacher = StringVar()
         
 
         # for responsive design
@@ -94,7 +112,7 @@ class Student :  #defining class
         dep_combo_height = one_hundredth_course_height*40
         dep_combo_width = one_hundredth_course_width*25
 
-        dep_combo = ttk.Combobox(course_frame,font=("times new roman",12,"bold"),state="readonly")
+        dep_combo = ttk.Combobox(course_frame,textvariable=self.var_dep,font=("times new roman",12,"bold"),state="readonly")
         dep_combo["values"] = ("Select Department","CSIT","BCA")
         dep_combo.current(0)
         dep_combo.place(x=xpos_dep_combo,y=ypos_dep_combo,width=dep_combo_width, height=dep_combo_height)
@@ -113,8 +131,8 @@ class Student :  #defining class
         course_combo_height = one_hundredth_course_height*40
         course_combo_width = one_hundredth_course_width*24
 
-        course_combo = ttk.Combobox(course_frame,font=("times new roman",12,"bold"),state="readonly")
-        course_combo["values"] = ("Select Courses","Data mining","IR","Java")
+        course_combo = ttk.Combobox(course_frame,textvariable=self.var_course,font=("times new roman",12,"bold"),state="readonly")
+        course_combo["values"] = ("Select Course","Data mining","IR","Java")
         course_combo.current(0)
         course_combo.place(x=xpos_course_combo,y=ypos_course_combo,width=course_combo_width, height=course_combo_height)
 
@@ -132,8 +150,8 @@ class Student :  #defining class
         year_combo_height = one_hundredth_course_height*40
         year_combo_width = one_hundredth_course_width*25
 
-        year_combo = ttk.Combobox(course_frame,font=("times new roman",12,"bold"),state="readonly")
-        year_combo["values"] = ("Select Years","2075","2076")
+        year_combo = ttk.Combobox(course_frame,textvariable=self.var_year,font=("times new roman",12,"bold"),state="readonly")
+        year_combo["values"] = ("Select Year","2075","2076")
         year_combo.current(0)
         year_combo.place(x=xpos_year_combo,y=ypos_year_combo,width=year_combo_width, height=year_combo_height)
 
@@ -152,7 +170,7 @@ class Student :  #defining class
         sem_combo_height = one_hundredth_course_height*40
         sem_combo_width = one_hundredth_course_width*24
 
-        sem_combo = ttk.Combobox(course_frame,font=("times new roman",12,"bold"),state="readonly")
+        sem_combo = ttk.Combobox(course_frame,textvariable=self.var_semester,font=("times new roman",12,"bold"),state="readonly")
         sem_combo["values"] = ("Select Semester","First","Second","Third","Fourth","Sixth","Seventh","Eighth")
         sem_combo.current(0)
         sem_combo.place(x=xpos_sem_combo,y=ypos_sem_combo,width=sem_combo_width, height=sem_combo_height)
@@ -189,33 +207,33 @@ class Student :  #defining class
         stu_id_label = Label(stuinfo_frame,text="Student ID No. : ",font=("times new roman",12,"bold"))
         stu_id_label.grid(row=0,column=0,sticky=EW)
 
-        stu_id_entry = ttk.Entry(stuinfo_frame,width=20,font=("times new roman",12,"bold"))
+        stu_id_entry = ttk.Entry(stuinfo_frame,textvariable=self.var_std_id,width=20,font=("times new roman",12,"bold"))
         stu_id_entry.grid(row=0,column=1,sticky=W)
 
         stu_name_label = Label(stuinfo_frame,text="Student Name : ",font=("times new roman",12,"bold"))
         stu_name_label.grid(row=0,column=2,sticky=EW)
 
-        stu_name_entry = ttk.Entry(stuinfo_frame,width=20,font=("times new roman",12,"bold"))
+        stu_name_entry = ttk.Entry(stuinfo_frame,textvariable=self.var_std_name,width=20,font=("times new roman",12,"bold"))
         stu_name_entry.grid(row=0,column=3,sticky=W)
 
         stu_section_label = Label(stuinfo_frame,text="Sections : ",font=("times new roman",12,"bold"))
         stu_section_label.grid(row=1,column=0,sticky=EW)
 
-        stu_section_combo = ttk.Combobox(stuinfo_frame,font=("times new roman",12,"bold"),state="readonly")
-        stu_section_combo["values"] = ("Select Sections","A","B","C")
+        stu_section_combo = ttk.Combobox(stuinfo_frame,textvariable=self.var_sec,font=("times new roman",12,"bold"),state="readonly")
+        stu_section_combo["values"] = ("Select Section","A","B","C")
         stu_section_combo.current(0)
         stu_section_combo.grid(row=1,column=1,sticky=W)
 
         stu_roll_label = Label(stuinfo_frame,text="Roll No. : ",font=("times new roman",12,"bold"))
         stu_roll_label.grid(row=1,column=2,sticky=EW)
 
-        stu_roll_entry = ttk.Entry(stuinfo_frame,width=20,font=("times new roman",12,"bold"))
+        stu_roll_entry = ttk.Entry(stuinfo_frame,textvariable=self.var_roll,width=20,font=("times new roman",12,"bold"))
         stu_roll_entry.grid(row=1,column=3,sticky=W)
 
         stu_gender_label = Label(stuinfo_frame,text="Gender : ",font=("times new roman",12,"bold"))
         stu_gender_label.grid(row=2,column=0)
 
-        stu_gender_combo = ttk.Combobox(stuinfo_frame,font=("times new roman",12,"bold"),state="readonly")
+        stu_gender_combo = ttk.Combobox(stuinfo_frame,textvariable=self.var_gender,font=("times new roman",12,"bold"),state="readonly")
         stu_gender_combo["values"] = ("Select Gender","Male","Female")
         stu_gender_combo.current(0)
         stu_gender_combo.grid(row=2,column=1,sticky=W)
@@ -223,37 +241,40 @@ class Student :  #defining class
         stu_dob_label = Label(stuinfo_frame,text="DOB : ",font=("times new roman",12,"bold"))
         stu_dob_label.grid(row=2,column=2,sticky=EW)
 
-        stu_dob_entry = ttk.Entry(stuinfo_frame,width=20,font=("times new roman",12,"bold"))
+        stu_dob_entry = ttk.Entry(stuinfo_frame,textvariable=self.var_dob,width=20,font=("times new roman",12,"bold"))
         stu_dob_entry.grid(row=2,column=3,sticky=W)
 
         stu_email_label = Label(stuinfo_frame,text="Email : ",font=("times new roman",12,"bold"))
         stu_email_label.grid(row=3,column=0,sticky=EW)
 
-        stu_email_entry = ttk.Entry(stuinfo_frame,width=20,font=("times new roman",12,"bold"))
+        stu_email_entry = ttk.Entry(stuinfo_frame,textvariable=self.var_email,width=20,font=("times new roman",12,"bold"))
         stu_email_entry.grid(row=3,column=1,sticky=W)
 
         stu_phone_label = Label(stuinfo_frame,text="Phone : ",font=("times new roman",12,"bold"))
         stu_phone_label.grid(row=3,column=2,sticky=EW)
 
-        stu_phone_entry = ttk.Entry(stuinfo_frame,width=20,font=("times new roman",12,"bold"))
+        stu_phone_entry = ttk.Entry(stuinfo_frame,textvariable=self.var_phone,width=20,font=("times new roman",12,"bold"))
         stu_phone_entry.grid(row=3,column=3,sticky=W)
 
         stu_address_label = Label(stuinfo_frame,text="Address : ",font=("times new roman",12,"bold"))
         stu_address_label.grid(row=4,column=0,sticky=EW)
 
-        stu_address_entry = ttk.Entry(stuinfo_frame,width=20,font=("times new roman",12,"bold"))
+        stu_address_entry = ttk.Entry(stuinfo_frame,textvariable=self.var_address,width=20,font=("times new roman",12,"bold"))
         stu_address_entry.grid(row=4,column=1,sticky=W)
 
         stu_teacher_label = Label(stuinfo_frame,text="Teacher Name : ",font=("times new roman",12,"bold"))
         stu_teacher_label.grid(row=4,column=2,sticky=EW)
 
-        stu_teacher_entry = ttk.Entry(stuinfo_frame,width=20,font=("times new roman",12,"bold"))
+        stu_teacher_entry = ttk.Entry(stuinfo_frame,textvariable=self.var_teacher,width=20,font=("times new roman",12,"bold"))
         stu_teacher_entry.grid(row=4,column=3,sticky=W)
 
-        radiobtn1 = ttk.Radiobutton(stuinfo_frame,text="Take photo Sample",value=1)
+
+        self.var_radio1 = StringVar()
+        radiobtn1 = ttk.Radiobutton(stuinfo_frame,variable=self.var_radio1,text="Take photo Sample",value="Yes")
         radiobtn1.grid(row=5,column=0,columnspan=2)
 
-        radiobtn2 = ttk.Radiobutton(stuinfo_frame,text="No photo Sample",value=0)
+        
+        radiobtn2 = ttk.Radiobutton(stuinfo_frame,variable=self.var_radio1,text="No photo Sample",value="No")
         radiobtn2.grid(row=5,column=2,columnspan=2)
 
 
@@ -267,77 +288,75 @@ class Student :  #defining class
 
         #Button section of left frame
 
-        button_width = one_hundredth_left_frame_width*23
+        button_width = one_hundredth_left_frame_width*20
         button_height = one_hundredth_left_frame_height*9
 
         #button_1
-        button1_img_path = IMG_DIR + "/button.png"
+        button1_img_path = IMG_DIR + "/save.png"
         button1 = Image.open(button1_img_path)
         button1 = button1.resize((button_width,button_height),Image.Resampling.LANCZOS)
         self.button1 = ImageTk.PhotoImage(button1)
 
-        button_label_1 = Button(left_frame,image=self.button1,cursor="hand2",bd=0)
-        button1_xpos = one_hundredth_left_frame_width*2
+        button_label_1 = Button(left_frame,command=self.add_data,image=self.button1,cursor="hand2",bd=0)
+        button1_xpos = one_hundredth_left_frame_width*12
         button1_ypos = one_hundredth_left_frame_height*92
         button_label_1.place(x=button1_xpos,y=button1_ypos,width=button_width,height=button_height)
 
         #button_2
-        button2_img_path = IMG_DIR + "/button.png"
+        button2_img_path = IMG_DIR + "/update.png"
         button2 = Image.open(button2_img_path)
         button2 = button2.resize((button_width,button_height),Image.Resampling.LANCZOS)
         self.button2 = ImageTk.PhotoImage(button2)
 
-        button_label_2 = Button(left_frame,image=self.button2,cursor="hand2",bd=0)
-        button2_xpos = one_hundredth_left_frame_width*27
+        button_label_2 = Button(left_frame,command=self.update_data,image=self.button2,cursor="hand2",bd=0)
+        button2_xpos = one_hundredth_left_frame_width*42
         button2_ypos = one_hundredth_left_frame_height*92
         button_label_2.place(x=button2_xpos,y=button2_ypos,width=button_width,height=button_height)
 
         #button_3
-        button3_img_path = IMG_DIR + "/button.png"
+        button3_img_path = IMG_DIR + "/delete.png"
         button3 = Image.open(button3_img_path)
         button3 = button3.resize((button_width,button_height),Image.Resampling.LANCZOS)
         self.button3 = ImageTk.PhotoImage(button3)
 
-        button_label_3 = Button(left_frame,image=self.button3,cursor="hand2",bd=0)
-        button3_xpos = one_hundredth_left_frame_width*52
+        button_label_3 = Button(left_frame,command=self.delete_data,image=self.button3,cursor="hand2",bd=0)
+        button3_xpos = one_hundredth_left_frame_width*72
         button3_ypos = one_hundredth_left_frame_height*92
         button_label_3.place(x=button3_xpos,y=button3_ypos,width=button_width,height=button_height)
 
         #button_4
-        button4_img_path = IMG_DIR + "/button.png"
+        button4_img_path = IMG_DIR + "/reset.png"
         button4 = Image.open(button4_img_path)
         button4 = button4.resize((button_width,button_height),Image.Resampling.LANCZOS)
         self.button4 = ImageTk.PhotoImage(button4)
 
-        button_label_4 = Button(left_frame,image=self.button4,cursor="hand2",bd=0)
-        button4_xpos = one_hundredth_left_frame_width*77
-        button4_ypos = one_hundredth_left_frame_height*92
+        button_label_4 = Button(left_frame,command=self.reset_data,image=self.button4,cursor="hand2",bd=0)
+        button4_xpos = one_hundredth_left_frame_width*12
+        button4_ypos = one_hundredth_left_frame_height*102
         button_label_4.place(x=button4_xpos,y=button4_ypos,width=button_width,height=button_height)
 
-        #width of button 5 and button 6
-        lower_button_width =one_hundredth_left_frame_width*49
-
+        
         #button_5
-        button5_img_path = IMG_DIR + "/button.png"
+        button5_img_path = IMG_DIR + "/addphotosample.png"
         button5 = Image.open(button5_img_path)
-        button5 = button5.resize((lower_button_width,button_height),Image.Resampling.LANCZOS)
+        button5 = button5.resize((button_width,button_height),Image.Resampling.LANCZOS)
         self.button5 = ImageTk.PhotoImage(button5)
 
         button_label_5 = Button(left_frame,image=self.button5,cursor="hand2",bd=0)
-        button1_xpos = one_hundredth_left_frame_width*2
+        button1_xpos = one_hundredth_left_frame_width*42
         button1_ypos = one_hundredth_left_frame_height*102
-        button_label_5.place(x=button1_xpos,y=button1_ypos,width=lower_button_width,height=button_height)
+        button_label_5.place(x=button1_xpos,y=button1_ypos,width=button_width,height=button_height)
 
         #button_6
-        button6_img_path = IMG_DIR + "/button.png"
+        button6_img_path = IMG_DIR + "/updatephotosample.png"
         button6 = Image.open(button6_img_path)
-        button6 = button6.resize((lower_button_width,button_height),Image.Resampling.LANCZOS)
+        button6 = button6.resize((button_width,button_height),Image.Resampling.LANCZOS)
         self.button6 = ImageTk.PhotoImage(button6)
 
         button_label_6 = Button(left_frame,image=self.button6,cursor="hand2",bd=0)
-        button6_xpos = one_hundredth_left_frame_width*51
+        button6_xpos = one_hundredth_left_frame_width*72
         button6_ypos = one_hundredth_left_frame_height*102
-        button_label_6.place(x=button6_xpos,y=button6_ypos,width=lower_button_width,height=button_height)
+        button_label_6.place(x=button6_xpos,y=button6_ypos,width=button_width,height=button_height)
 
 
 
@@ -357,8 +376,7 @@ class Student :  #defining class
         right_frame = LabelFrame(b_lbl,bd=5,relief=RIDGE,text="Search For Students",font=("times new roman",16,"bold"),bg=ps.theme_color)
         right_frame.place(x=xpos_right_frame,y=ypos_right_frame,width=right_frame_width,height=right_frame_height)
         right_frame.rowconfigure(index=0,weight=1)
-        right_frame.rowconfigure(index=1,weight=1)
-        right_frame.rowconfigure(index=2,weight=8)
+        right_frame.rowconfigure(index=1,weight=9)
         right_frame.columnconfigure(index=0,weight=1)
         right_frame.columnconfigure(index=1,weight=1)
         right_frame.columnconfigure(index=2,weight=1)
@@ -383,7 +401,7 @@ class Student :  #defining class
         stu_search_entry.grid(row=0,column=2)
 
         #Search button
-        search_img_path = IMG_DIR + "/button.png"
+        search_img_path = IMG_DIR + "/search.png"
         search_button = Image.open(search_img_path)
         search_button_height = one_hundredth_right_frame_height*5
         search_button_width = one_hundredth_right_frame_width*20
@@ -395,7 +413,7 @@ class Student :  #defining class
 
 
         #Show all button
-        show_img_path = IMG_DIR + "/button.png"
+        show_img_path = IMG_DIR + "/showall.png"
         show_button = Image.open(show_img_path)
         show_button_height = one_hundredth_right_frame_height*5
         show_button_width = one_hundredth_right_frame_width*20
@@ -404,6 +422,232 @@ class Student :  #defining class
 
         show_button_label = Button(right_frame,image=self.show_button,cursor="hand2",bd=0)
         show_button_label.grid(row=0,column=4)
+
+        #search table frame
+        search_table_frame_width = one_hundredth_right_frame_width*98
+        search_table_frame_height = one_hundredth_right_frame_height*100
+        search_table_frame = Frame(right_frame,bd=2,relief=RIDGE,width=search_table_frame_width,height=search_table_frame_height)
+        search_table_frame.grid(row=1,column=0,columnspan=5,sticky=W+E+N+S)
+
+        scroll_x = ttk.Scrollbar(search_table_frame,orient=HORIZONTAL)
+        scroll_y = ttk.Scrollbar(search_table_frame,orient=VERTICAL)
+
+        self.search_table = ttk.Treeview(search_table_frame,column=("Dep","Course","Year","Sem","ID","Name","Sec","Roll","Gender","DOB","Email","Phone","Address","Teacher","Photo"),xscrollcommand=scroll_x.set,yscrollcommand=scroll_y.set)
+        scroll_x.pack(side=BOTTOM,fill=X)
+        scroll_y.pack(side=RIGHT,fill=Y)
+        scroll_x.config(command=self.search_table.xview)
+        scroll_y.config(command=self.search_table.yview)
+
+        self.search_table.heading("Dep",text="Department")
+        self.search_table.heading("Course",text="Course")
+        self.search_table.heading("Year",text="Year")
+        self.search_table.heading("Sem",text="Semester")
+        self.search_table.heading("ID",text="StudentID")
+        self.search_table.heading("Name",text="Name")
+        self.search_table.heading("Sec",text="Section")
+        self.search_table.heading("Roll",text="Roll No")
+        self.search_table.heading("Gender",text="Gender")
+        self.search_table.heading("DOB",text="D.O.B")
+        self.search_table.heading("Email",text="Email")
+        self.search_table.heading("Phone",text="Phone")
+        self.search_table.heading("Address",text="Address")
+        self.search_table.heading("Teacher",text="Teacher")
+        self.search_table.heading("Photo",text="PhotoSampleStatus")
+        self.search_table["show"] = "headings"
+
+        self.search_table.column("Dep",width=100)
+        self.search_table.column("Course",width=100)
+        self.search_table.column("Year",width=100)
+        self.search_table.column("Sem",width=100)
+        self.search_table.column("ID",width=100)
+        self.search_table.column("Name",width=100)
+        self.search_table.column("Sec",width=100)
+        self.search_table.column("Roll",width=100)
+        self.search_table.column("Gender",width=100)
+        self.search_table.column("DOB",width=100)
+        self.search_table.column("Email",width=100)
+        self.search_table.column("Phone",width=100)
+        self.search_table.column("Address",width=100)
+        self.search_table.column("Teacher",width=100)
+        self.search_table.column("Photo",width=150)
+
+        self.search_table.pack(fill=BOTH,expand=1)
+        self.search_table.bind("<ButtonRelease>",self.get_cursor)
+
+        self.fetch_data()
+
+    # ========================Function Declaration ===============================
+    def add_data(self):
+
+        if self.var_dep.get() ==  "Select Department" or self.var_std_name.get() == "" or self.var_std_id.get() == "":
+            messagebox.showerror("Error","Department,Student Name or Student ID  fields are required",parent=self.root)
+
+        else:
+            try:
+                conn = mysql.connector.connect(host="localhost",username=ps.username,password=ps.password,database=ps.db)
+                my_cursor = conn.cursor()
+                my_cursor.execute("insert into student values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",(
+                    self.var_dep.get(),
+                    self.var_course.get(),
+                    self.var_year.get(),
+                    self.var_semester.get(),
+                    self.var_std_id.get(),
+                    self.var_std_name.get(),
+                    self.var_sec.get(),
+                    self.var_roll.get(),
+                    self.var_gender.get(),
+                    self.var_dob.get(),
+                    self.var_email.get(),
+                    self.var_phone.get(),
+                    self.var_address.get(),
+                    self.var_teacher.get(),
+                    self.var_radio1.get()
+                ))
+                conn.commit()
+                self.fetch_data()
+                conn.close()
+                messagebox.showinfo("Success","Data Entered Successfully",parent=self.root)
+            except Exception as es:
+                messagebox.showerror("Error",f"Due to : {str(es)}",parent=self.root)
+
+    #================= fetch data ==========================
+    def fetch_data(self):
+        conn = mysql.connector.connect(host="localhost",username=ps.username,password=ps.password,database=ps.db)
+        my_cursor = conn.cursor()
+        my_cursor.execute("select * from student")
+        data = my_cursor.fetchall()
+
+        if len(data) != 0:
+            self.search_table.delete(*self.search_table.get_children())
+            for i in data:
+                self.search_table.insert("",END,values=i)
+            conn.commit()
+        conn.close()
+
+    #====================== get data from the table on click of row to update ================
+    def get_cursor(self,event=""):
+        cursor_focus = self.search_table.focus()
+        content = self.search_table.item(cursor_focus)
+        data = content["values"]
+
+        self.var_dep.set(data[0])
+        self.var_course.set(data[1])
+        self.var_year.set(data[2])
+        self.var_semester.set(data[3])
+        self.var_std_id.set(data[4])
+        self.var_std_name.set(data[5])
+        self.var_sec.set(data[6])
+        self.var_roll.set(data[7])
+        self.var_gender.set(data[8])
+        self.var_dob.set(data[9])
+        self.var_email.set(data[10])
+        self.var_phone.set(data[11])
+        self.var_address.set(data[12])
+        self.var_teacher.set(data[13])
+        self.var_radio1.set(data[14])
+
+    #======================= update function =============================
+    def update_data(self):
+        if self.var_dep.get() ==  "Select Department" or self.var_std_name.get() == "" or self.var_std_id.get() == "":
+            messagebox.showerror("Error","Department,Student Name or Student ID  fields are required",parent=self.root)
+
+        else:
+            try:
+                update = messagebox.askyesno("Update","Do you want to update this student details ?",parent=self.root)
+                if update > 0 :
+                    conn = mysql.connector.connect(host="localhost",username=ps.username,password=ps.password,database=ps.db)
+                    my_cursor = conn.cursor()
+                    my_cursor.execute("update student set Dep=%s,Course=%s,Year=%s,Sem=%s,Name=%s,Sec=%s,Roll=%s,Gender=%s,DOB=%s,Email=%s,Phone=%s,Address=%s,Teacher=%s,Photo=%s where ID=%s",(
+                        self.var_dep.get(),
+                        self.var_course.get(),
+                        self.var_year.get(),
+                        self.var_semester.get(),
+                        self.var_std_name.get(),
+                        self.var_sec.get(),
+                        self.var_roll.get(),
+                        self.var_gender.get(),
+                        self.var_dob.get(),
+                        self.var_email.get(),
+                        self.var_phone.get(),
+                        self.var_address.get(),
+                        self.var_teacher.get(),
+                        self.var_radio1.get(),
+                        self.var_std_id.get()
+
+                    ))
+
+                else:
+                    if not update:
+                        return
+
+                messagebox.showinfo("Success","Students details updated successfully.",parent=self.root)
+                conn.commit()
+                self.fetch_data()
+                conn.close()
+
+            except Exception as es:
+                messagebox.showerror("Error",f"Due to : {str(es)}",parent=self.root)
+
+    # =========================delete function ==========================================
+    def delete_data(self):
+        if self.var_std_id.get() == "" :
+            messagebox.showerror("Error","Student id must be required",parent=self.root)
+
+        else :
+            try :
+                delete = messagebox.askyesno("Delete","Do you want to delete the details of this student ?",parent=self.root)
+                if delete > 0 :
+                    conn = mysql.connector.connect(host="localhost",username=ps.username,password=ps.password,database=ps.db)
+                    my_cursor = conn.cursor()
+                    sql = "delete from student where ID=%s"
+                    val = (self.var_std_id.get(),)
+                    my_cursor.execute(sql,val)
+
+                else :
+                    if not delete :
+                        return
+
+                conn.commit()
+                self.fetch_data()
+                conn.close()
+                messagebox.showinfo("Success","Successfully deleted",parent=self.root)
+
+            except Exception as es:
+                messagebox.showerror("Error",f"Due to : {str(es)}",parent=self.root)
+
+    #================== Reset function ==================================
+    def reset_data(self):
+        self.var_dep.set("Select Department")
+        self.var_course.set("Select Course")
+        self.var_year.set("Select Year")
+        self.var_semester.set("Select Semester")
+        self.var_std_id.set("")
+        self.var_std_name.set("")
+        self.var_sec.set("Select Section")
+        self.var_roll.set("")
+        self.var_gender.set("Select Gender")
+        self.var_dob.set("")
+        self.var_email.set("")
+        self.var_phone.set("")
+        self.var_address.set("")
+        self.var_teacher.set("")
+        self.var_radio1.set("")
+
+
+
+
+
+            
+
+
+
+
+            
+
+        
+
+
+        
         
 
 

@@ -3,6 +3,7 @@ from tkinter import ttk  #importing tkinter package
 from PIL import Image, ImageTk  #importing Pillow package
 import os #importing os package
 import math
+from student import Student
 
 
 
@@ -107,7 +108,7 @@ class Face_Recognition_System :  #defining class
         button5 = button5.resize((button_width,button_height),Image.Resampling.LANCZOS)
         self.button5 = ImageTk.PhotoImage(button5)
 
-        button_label_5 = Button(b_lbl,image=self.button5,cursor="hand2",bd=0)
+        button_label_5 = Button(b_lbl,command=self.student_details,image=self.button5,cursor="hand2",bd=0)
         button5_xpos = (self.one_tenth_screen_width)*6
         button5_ypos = (background_height/11)*5
         button_label_5.place(x=button5_xpos,y=button5_ypos,width=button_width,height=button_height)
@@ -149,6 +150,15 @@ class Face_Recognition_System :  #defining class
         button_label_8.place(x=button8_xpos,y=button8_ypos,width=button_width,height=button_height)
 
 
+    # ================= Functions Button ==============================
+    #Function for creating new window from main window buttons
+    def student_details(self):
+            self.new_window = Toplevel(self.root)
+            self.app = Student(self.new_window)    
+
+        
+
+
 
 
 
@@ -161,3 +171,5 @@ if __name__ == "__main__":
     root = Tk()  #initializing tk object
     obj = Face_Recognition_System(root)  #initializing Face_Recognition_System object
     root.mainloop()  #calling mainloop fuction of root class
+
+    
