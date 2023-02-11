@@ -4,6 +4,8 @@ from PIL import Image, ImageTk  #importing Pillow package
 import os #importing os package
 import math
 from student import Student
+from tkinter import messagebox
+import train
 
 
 
@@ -83,7 +85,7 @@ class Face_Recognition_System :  #defining class
         button3 = button3.resize((button_width,button_height),Image.Resampling.LANCZOS)
         self.button3 = ImageTk.PhotoImage(button3)
 
-        button_label_3 = Button(b_lbl,image=self.button3,cursor="hand2",bd=0)
+        button_label_3 = Button(b_lbl,command=self.train_data,image=self.button3,cursor="hand2",bd=0)
         button3_xpos = (self.one_tenth_screen_width)*7
         button3_ypos = (background_height/11)*2
         button_label_3.place(x=button3_xpos,y=button3_ypos,width=button_width,height=button_height)
@@ -95,7 +97,7 @@ class Face_Recognition_System :  #defining class
         button4 = button4.resize((button_width,button_height),Image.Resampling.LANCZOS)
         self.button4 = ImageTk.PhotoImage(button4)
 
-        button_label_4 = Button(b_lbl,image=self.button4,cursor="hand2",bd=0)
+        button_label_4 = Button(b_lbl,command=self.open_img,image=self.button4,cursor="hand2",bd=0)
         button4_xpos = (self.one_tenth_screen_width)*2
         button4_ypos = (background_height/11)*5
         button_label_4.place(x=button4_xpos,y=button4_ypos,width=button_width,height=button_height)
@@ -154,7 +156,18 @@ class Face_Recognition_System :  #defining class
     #Function for creating new window from main window buttons
     def student_details(self):
             self.new_window = Toplevel(self.root)
-            self.app = Student(self.new_window)    
+            self.app = Student(self.new_window)
+
+    #Function for creating new window from train data window buttons
+    def train_data(self):
+        train.train_classifier()
+        messagebox.showinfo("Result","Training datasets completed !!",parent=self.root)
+             
+
+
+    # ====================== Function for photos button ===================
+    def open_img(self):
+         os.startfile("data")   
 
         
 

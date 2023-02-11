@@ -6,6 +6,7 @@ import math
 import project_standard as ps
 from tkinter import messagebox
 import mysql.connector
+import cv2
 
 
 
@@ -342,7 +343,7 @@ class Student :  #defining class
         button5 = button5.resize((button_width,button_height),Image.Resampling.LANCZOS)
         self.button5 = ImageTk.PhotoImage(button5)
 
-        button_label_5 = Button(left_frame,image=self.button5,cursor="hand2",bd=0)
+        button_label_5 = Button(left_frame,command=self.generate_dataset,image=self.button5,cursor="hand2",bd=0)
         button1_xpos = one_hundredth_left_frame_width*42
         button1_ypos = one_hundredth_left_frame_height*102
         button_label_5.place(x=button1_xpos,y=button1_ypos,width=button_width,height=button_height)
@@ -505,6 +506,8 @@ class Student :  #defining class
                 ))
                 conn.commit()
                 self.fetch_data()
+                if self.var_radio1.get() == "Yes" :
+                    self.create_dataset()
                 conn.close()
                 messagebox.showinfo("Success","Data Entered Successfully",parent=self.root)
             except Exception as es:
@@ -632,6 +635,133 @@ class Student :  #defining class
         self.var_address.set("")
         self.var_teacher.set("")
         self.var_radio1.set("")
+
+    #========================= Generate data set or take a photo sample ======================
+    def generate_dataset(self):
+        if self.var_dep.get() ==  "Select Department" or self.var_std_name.get() == "" or self.var_std_id.get() == "" or self.var_radio1.get() == "Yes":
+            messagebox.showerror("Error","Department,Student Name or Student ID  fields are required or No photo sample should be ticked",parent=self.root)
+
+        else:
+            try:
+                conn = mysql.connector.connect(host="localhost",username=ps.username,password=ps.password,database=ps.db)
+                my_cursor = conn.cursor()
+                
+                
+                id = self.var_std_id.get()
+                
+
+                my_cursor.execute("update student set Dep=%s,Course=%s,Year=%s,Sem=%s,Name=%s,Sec=%s,Roll=%s,Gender=%s,DOB=%s,Email=%s,Phone=%s,Address=%s,Teacher=%s,Photo=%s where ID=%s",(
+                        self.var_dep.get(),
+                        self.var_course.get(),
+                        self.var_year.get(),
+                        self.var_semester.get(),
+                        self.var_std_name.get(),
+                        self.var_sec.get(),
+                        self.var_roll.get(),
+                        self.var_gender.get(),
+                        self.var_dob.get(),
+                        self.var_email.get(),
+                        self.var_phone.get(),
+                        self.var_address.get(),
+                        self.var_teacher.get(),
+                        "Yes",
+                        self.var_std_id.get()
+
+                    ))
+                conn.commit()
+                self.fetch_data()
+                self.reset_data()
+                conn.close()
+
+                # ============ load predefined model to detect face for capturing images of face ===============
+                face_detector = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
+
+                def face_cropped(img) :
+                    gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+                    faces = face_detector.detectMultiScale(gray,1.3,5)
+                    #scaling factor = 1.3
+                    #minimum neighbor = 5
+
+                    for (x,y,w,h) in faces :
+                        face_cropped = img[y:y+h,x:x+w]
+                        return face_cropped
+
+                cap = cv2.VideoCapture(0)
+                img_id = 0
+                while True:
+                    ret,my_frame = cap.read()
+                    if face_cropped(my_frame) is not None:
+                        img_id += 1
+                        face = cv2.resize(face_cropped(my_frame),(450,450))
+                        face = cv2.cvtColor(face,cv2.COLOR_BGR2GRAY)
+                        file_name_path = "data/user."+str(id)+"."+str(img_id)+".jpg"
+                        cv2.imwrite(file_name_path,face)
+                        cv2.putText(face,str(img_id),(50,50),cv2.FONT_HERSHEY_COMPLEX,2,(0,255,0),2)
+                        cv2.imshow("Cropped Face", face)
+
+                    if cv2.waitKey(1) == 13 or int(img_id) == 100 : # this is ENTER key code
+                        break
+
+                cap.release()
+                cv2.destroyAllWindows()
+                messagebox.showinfo("Result","Added data set successfully !!")
+
+            except Exception as es:
+                messagebox.showerror("Error",f"Due to : {str(es)}",parent=self.root)
+
+    # ============================== function for creating dataset during save ===================
+    def create_dataset(self):
+            try:
+                
+                
+                
+                id = self.var_std_id.get()
+                
+
+                
+                
+                # ============ load predefined model to detect face for capturing images of face ===============
+                face_detector = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
+
+                def face_cropped(img) :
+                    gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+                    faces = face_detector.detectMultiScale(gray,1.3,5)
+                    #scaling factor = 1.3
+                    #minimum neighbor = 5
+
+                    for (x,y,w,h) in faces :
+                        face_cropped = img[y:y+h,x:x+w]
+                        return face_cropped
+
+                cap = cv2.VideoCapture(0)
+                img_id = 0
+                while True:
+                    ret,my_frame = cap.read()
+                    if face_cropped(my_frame) is not None:
+                        img_id += 1
+                        face = cv2.resize(face_cropped(my_frame),(450,450))
+                        face = cv2.cvtColor(face,cv2.COLOR_BGR2GRAY)
+                        file_name_path = "data/user."+str(id)+"."+str(img_id)+".jpg"
+                        cv2.imwrite(file_name_path,face)
+                        cv2.putText(face,str(img_id),(50,50),cv2.FONT_HERSHEY_COMPLEX,2,(0,255,0),2)
+                        cv2.imshow("Cropped Face", face)
+
+                    if cv2.waitKey(1) == 13 or int(img_id) == 100 : # this is ENTER key code
+                        break
+
+                cap.release()
+                cv2.destroyAllWindows()
+                messagebox.showinfo("Result","Created data set successfully !!")
+
+            except Exception as es:
+                messagebox.showerror("Error",f"Due to : {str(es)}",parent=self.root)
+            
+
+
+                
+                    
+
+
 
 
 
