@@ -6,6 +6,7 @@ import math
 from student import Student
 from tkinter import messagebox
 import train
+import face_recognition as f_r
 
 
 
@@ -73,7 +74,7 @@ class Face_Recognition_System :  #defining class
         button2 = button2.resize((button_width,button_height),Image.Resampling.LANCZOS)
         self.button2 = ImageTk.PhotoImage(button2)
 
-        button_label_2 = Button(b_lbl,image=self.button2,cursor="hand2",bd=0)
+        button_label_2 = Button(b_lbl,command=f_r.face_recog,image=self.button2,cursor="hand2",bd=0)
         button2_xpos = (self.one_tenth_screen_width)*4
         button2_ypos = (background_height/11)*2
         button_label_2.place(x=button2_xpos,y=button2_ypos,width=button_width,height=button_height)
