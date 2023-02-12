@@ -354,7 +354,7 @@ class Student :  #defining class
         button6 = button6.resize((button_width,button_height),Image.Resampling.LANCZOS)
         self.button6 = ImageTk.PhotoImage(button6)
 
-        button_label_6 = Button(left_frame,image=self.button6,cursor="hand2",bd=0)
+        button_label_6 = Button(left_frame,command=self.update_dataset,image=self.button6,cursor="hand2",bd=0)
         button6_xpos = one_hundredth_left_frame_width*72
         button6_ypos = one_hundredth_left_frame_height*102
         button_label_6.place(x=button6_xpos,y=button6_ypos,width=button_width,height=button_height)
@@ -752,6 +752,79 @@ class Student :  #defining class
                 cap.release()
                 cv2.destroyAllWindows()
                 messagebox.showinfo("Result","Created data set successfully !!")
+
+            except Exception as es:
+                messagebox.showerror("Error",f"Due to : {str(es)}",parent=self.root)
+
+    #========================= Update data set or function for update photos button ======================
+    def update_dataset(self):
+        if self.var_dep.get() ==  "Select Department" or self.var_std_name.get() == "" or self.var_std_id.get() == "" or self.var_radio1.get() == "No":
+            messagebox.showerror("Error","Department,Student Name or Student ID  fields are required or Take photo sample should be ticked",parent=self.root)
+
+        else:
+            try:
+                conn = mysql.connector.connect(host="localhost",username=ps.username,password=ps.password,database=ps.db)
+                my_cursor = conn.cursor()
+                
+                
+                id = self.var_std_id.get()
+                
+
+                my_cursor.execute("update student set Dep=%s,Course=%s,Year=%s,Sem=%s,Name=%s,Sec=%s,Roll=%s,Gender=%s,DOB=%s,Email=%s,Phone=%s,Address=%s,Teacher=%s,Photo=%s where ID=%s",(
+                        self.var_dep.get(),
+                        self.var_course.get(),
+                        self.var_year.get(),
+                        self.var_semester.get(),
+                        self.var_std_name.get(),
+                        self.var_sec.get(),
+                        self.var_roll.get(),
+                        self.var_gender.get(),
+                        self.var_dob.get(),
+                        self.var_email.get(),
+                        self.var_phone.get(),
+                        self.var_address.get(),
+                        self.var_teacher.get(),
+                        "Yes",
+                        self.var_std_id.get()
+
+                    ))
+                conn.commit()
+                self.fetch_data()
+                self.reset_data()
+                conn.close()
+
+                # ============ load predefined model to detect face for capturing images of face ===============
+                face_detector = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
+
+                def face_cropped(img) :
+                    gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+                    faces = face_detector.detectMultiScale(gray,1.3,5)
+                    #scaling factor = 1.3
+                    #minimum neighbor = 5
+
+                    for (x,y,w,h) in faces :
+                        face_cropped = img[y:y+h,x:x+w]
+                        return face_cropped
+
+                cap = cv2.VideoCapture(0)
+                img_id = 0
+                while True:
+                    ret,my_frame = cap.read()
+                    if face_cropped(my_frame) is not None:
+                        img_id += 1
+                        face = cv2.resize(face_cropped(my_frame),(450,450))
+                        face = cv2.cvtColor(face,cv2.COLOR_BGR2GRAY)
+                        file_name_path = "data/user."+str(id)+"."+str(img_id)+".jpg"
+                        cv2.imwrite(file_name_path,face)
+                        cv2.putText(face,str(img_id),(50,50),cv2.FONT_HERSHEY_COMPLEX,2,(0,255,0),2)
+                        cv2.imshow("Cropped Face", face)
+
+                    if cv2.waitKey(1) == 13 or int(img_id) == 100 : # this is ENTER key code
+                        break
+
+                cap.release()
+                cv2.destroyAllWindows()
+                messagebox.showinfo("Result","Updated data set successfully !!")
 
             except Exception as es:
                 messagebox.showerror("Error",f"Due to : {str(es)}",parent=self.root)
