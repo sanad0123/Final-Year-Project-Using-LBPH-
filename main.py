@@ -4,6 +4,7 @@ from PIL import Image, ImageTk  #importing Pillow package
 import os #importing os package
 import math
 from student import Student
+from attendance import Attendance
 from tkinter import messagebox
 import train
 import face_recognition as f_r
@@ -62,7 +63,7 @@ class Face_Recognition_System :  #defining class
         button1 = button1.resize((button_width,button_height),Image.Resampling.LANCZOS)
         self.button1 = ImageTk.PhotoImage(button1)
 
-        button_label_1 = Button(b_lbl,image=self.button1,cursor="hand2",bd=0)
+        button_label_1 = Button(b_lbl,command=self.attendance,image=self.button1,cursor="hand2",bd=0)
         button1_xpos = self.one_tenth_screen_width
         button1_ypos = (background_height/11)*2
         button_label_1.place(x=button1_xpos,y=button1_ypos,width=button_width,height=button_height)
@@ -158,6 +159,12 @@ class Face_Recognition_System :  #defining class
     def student_details(self):
             self.new_window = Toplevel(self.root)
             self.app = Student(self.new_window)
+
+
+    #Function for creating new window from main window buttons
+    def attendance(self):
+            self.new_window = Toplevel(self.root)
+            self.app = Attendance(self.new_window)
 
     #Function for creating new window from train data window buttons
     def train_data(self):

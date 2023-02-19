@@ -39,7 +39,7 @@ def face_recog():
                 cv2.rectangle(img,(x,y),(x+w,y+h),(0,0,255),3)
                 cv2.putText(img,"Unknown face",(x,y-5),cv2.FONT_HERSHEY_COMPLEX,0.8,(255,255,255),3)
 
-        coord = [x,y,w,h]
+            coord = [x,y,w,h]
 
         return coord
     

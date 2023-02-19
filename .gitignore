@@ -8,3 +8,9 @@ data/*
 
 # But don't ignore the temp folder itself
 !data/
+
+# Ignore all files in the temp folder
+attendance/*
+
+# But don't ignore the temp folder itself
+!attendance/

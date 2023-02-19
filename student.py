@@ -23,7 +23,7 @@ class Student :  #defining class
         self.screen_height = self.root.winfo_screenheight()-60 #get the screen height
         self.screen_height_str = str(self.screen_height) #get the screen height in string
         self.root.geometry(self.screen_width_str + "x" + self.screen_height_str + "+0" + "+0")  #setting up areaofwindow + xorigin + yorigin of window
-        self.root.title("Smart Attendance System")   #setting title of the window
+        self.root.title("Student Management System")   #setting title of the window
 
         #====================variables===========================
         self.var_dep = StringVar()
