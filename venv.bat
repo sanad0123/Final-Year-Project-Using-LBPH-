@@ -7,4 +7,8 @@
 
 python -m venv venv
 
+mkdir data
+
+mkdir attendance
+
 pip install -r requirements.txt

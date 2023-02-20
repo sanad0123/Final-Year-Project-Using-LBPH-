@@ -40,6 +40,16 @@ class Attendance :  #defining class
         self.one_tenth_screen_height = int(self.screen_height/10)    #1/10 of screen height
         self.one_hundredth_screen_width = math.floor(self.screen_width/100)     #1/100 of screen width
 
+        #====================variables===========================
+        self.var_dep = StringVar()
+        self.var_course = StringVar()
+        self.var_std_id = StringVar()
+        self.var_std_name = StringVar()
+        self.var_roll = StringVar()
+        self.var_time = StringVar()
+        self.var_date = StringVar()
+        self.var_attendance = StringVar()
+
 
         # header section
 
@@ -114,7 +124,7 @@ class Attendance :  #defining class
         id_label = Label(left_frame,text="Student ID : ",font=("times new roman",12,"bold"),bg=ps.theme_color)
         id_label.place(x=row_first_pos,y=column_first_pos,width=widget_width)
 
-        id_entry = ttk.Entry(left_frame,font=("times new roman",12,"bold"))
+        id_entry = ttk.Entry(left_frame,textvariable=self.var_std_id,font=("times new roman",12,"bold"))
         id_entry.place(x=row_second_pos,y=column_first_pos,width=widget_width)
 
         #Roll label
@@ -123,7 +133,7 @@ class Attendance :  #defining class
         roll_label = Label(left_frame,text="Roll : ",font=("times new roman",12,"bold"),bg=ps.theme_color)
         roll_label.place(x=row_third_pos,y=column_first_pos,width=widget_width)
 
-        roll_entry = ttk.Entry(left_frame,font=("times new roman",12,"bold"))
+        roll_entry = ttk.Entry(left_frame,textvariable=self.var_roll,font=("times new roman",12,"bold"))
         roll_entry.place(x=row_fourth_pos,y=column_first_pos,width=widget_width)
 
         #Name label
@@ -132,7 +142,7 @@ class Attendance :  #defining class
         name_label = Label(left_frame,text="Name : ",font=("times new roman",12,"bold"),bg=ps.theme_color)
         name_label.place(x=row_first_pos,y=column_second_pos,width=widget_width)
 
-        name_entry = ttk.Entry(left_frame,font=("times new roman",12,"bold"))
+        name_entry = ttk.Entry(left_frame,textvariable=self.var_std_name,font=("times new roman",12,"bold"))
         name_entry.place(x=row_second_pos,y=column_second_pos,width=widget_width)
 
         #Department label
@@ -141,7 +151,7 @@ class Attendance :  #defining class
         dep_label = Label(left_frame,text="Department : ",font=("times new roman",12,"bold"),bg=ps.theme_color)
         dep_label.place(x=row_third_pos,y=column_second_pos,width=widget_width)
 
-        dep_entry = ttk.Entry(left_frame,font=("times new roman",12,"bold"))
+        dep_entry = ttk.Entry(left_frame,textvariable=self.var_dep,font=("times new roman",12,"bold"))
         dep_entry.place(x=row_fourth_pos,y=column_second_pos,width=widget_width)
 
         #Time label
@@ -150,7 +160,7 @@ class Attendance :  #defining class
         time_label = Label(left_frame,text="Time : ",font=("times new roman",12,"bold"),bg=ps.theme_color)
         time_label.place(x=row_first_pos,y=column_third_pos,width=widget_width)
 
-        time_entry = ttk.Entry(left_frame,font=("times new roman",12,"bold"))
+        time_entry = ttk.Entry(left_frame,textvariable=self.var_time,font=("times new roman",12,"bold"))
         time_entry.place(x=row_second_pos,y=column_third_pos,width=widget_width)
 
         #Date label
@@ -159,7 +169,7 @@ class Attendance :  #defining class
         date_label = Label(left_frame,text="Date : ",font=("times new roman",12,"bold"),bg=ps.theme_color)
         date_label.place(x=row_third_pos,y=column_third_pos,width=widget_width)
 
-        date_entry = ttk.Entry(left_frame,font=("times new roman",12,"bold"))
+        date_entry = ttk.Entry(left_frame,textvariable=self.var_date,font=("times new roman",12,"bold"))
         date_entry.place(x=row_fourth_pos,y=column_third_pos,width=widget_width)
 
         #Subject label
@@ -168,16 +178,16 @@ class Attendance :  #defining class
         course_label = Label(left_frame,text="Course : ",font=("times new roman",12,"bold"),bg=ps.theme_color)
         course_label.place(x=row_first_pos,y=column_fourth_pos,width=widget_width)
 
-        course_entry = ttk.Entry(left_frame,font=("times new roman",12,"bold"))
+        course_entry = ttk.Entry(left_frame,textvariable=self.var_course,font=("times new roman",12,"bold"))
         course_entry.place(x=row_second_pos,y=column_fourth_pos,width=widget_width)
 
-        #Date label
+        #Attendance label
         
         
         attendance_label = Label(left_frame,text="Attendance Status: ",font=("times new roman",12,"bold"),bg=ps.theme_color)
         attendance_label.place(x=row_third_pos,y=column_fourth_pos,width=widget_width)
 
-        attendance_combo = ttk.Combobox(left_frame,font=("times new roman",12,"bold"),state="readonly")
+        attendance_combo = ttk.Combobox(left_frame,textvariable=self.var_attendance,font=("times new roman",12,"bold"),state="readonly")
         attendance_combo["values"] = ("Status","Present","Absent")
         attendance_combo.current(0)
         attendance_combo.place(x=row_fourth_pos,y=column_fourth_pos,width=widget_width)
@@ -230,6 +240,7 @@ class Attendance :  #defining class
         self.AttendanceReportTable.column("Attendance",width=100)
 
         self.AttendanceReportTable.pack(fill=BOTH,expand=1)
+        self.AttendanceReportTable.bind("<ButtonRelease>",self.get_cursor)
 
         #button size
         self.one_sixteenth_screen_width = math.floor(self.screen_width/16)
@@ -237,7 +248,7 @@ class Attendance :  #defining class
         button_height = self.one_hundredth_background_height*16
 
         #button_1
-        button1_img_path = IMG_DIR + "/save.png"
+        button1_img_path = IMG_DIR + "/attendance.png"
         button1 = Image.open(button1_img_path)
         button1 = button1.resize((button_width,button_height),Image.Resampling.LANCZOS)
         self.button1 = ImageTk.PhotoImage(button1)
@@ -294,6 +305,13 @@ class Attendance :  #defining class
 
     # function for taking attendance
     def take_attendance(self):
+        now = datetime.now()
+        today = now.strftime("%d-%b-%Y")
+        file_name = "attendance/"+today+".csv"
+        if not os.path.isfile(file_name):
+            open(file_name, 'w').close()
+        else:
+            os.remove(file_name)
         def draw_boundary(img,classifier,scaleFactor,minNeighbors,clf):
             gray_image = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
             features = classifier.detectMultiScale(gray_image,scaleFactor,minNeighbors)
@@ -314,7 +332,7 @@ class Attendance :  #defining class
 
                 
                 i = str(id)
-                i = "+".join(i)
+                #i = "+".join(i)
 
                 my_cursor.execute("select Roll from student where ID = "+str(id))
                 r = my_cursor.fetchone()
@@ -369,17 +387,39 @@ class Attendance :  #defining class
         now = datetime.now()
         today = now.strftime("%d-%b-%Y")
         file_name = "attendance/"+today+".csv"
-        with open(file_name,"w+",newline="\n") as f:
-            myDataList = f.readlines()
-            name_list = []
-            for line in myDataList:
-                entry = line.split((",")) #[[id],[name]] where line is id,name
-                name_list.append(entry[0]) #name_list = [id]
-            if(i not in name_list):
+        filename = today+".csv"
+        # Set the directory path and filename
+        directory = 'attendance/'
+        #os.remove(file_name)
+
+        # Check if the file exists
+        if not os.path.isfile(directory + filename):
+        # If the file doesn't exist, create a new empty file
+            open(directory + filename, 'w').close()
+            with open(file_name,"r+",newline="\n") as f:
+                myDataList = f.readlines()
+                name_list = []
+                for line in myDataList:
+                    entry = line.split((",")) #[[id],[name]] where line is id,name
+                    name_list.append(entry[0]) #name_list = [id]
+                if(i not in name_list):
+                        
+                    date = now.strftime("%d/%m/%Y")
+                    time = now.strftime("%H:%M:%S")
+                    f.writelines(f"\n{i},{r},{n},{d},{time},{date},{c},Present")
+        else:
+            with open(file_name,"r+",newline="\n") as f:
+                myDataList = f.readlines()
+                name_list = []
+                for line in myDataList:
+                    entry = line.split((",")) #[[id],[name]] where line is id,name
+                    name_list.append(entry[0]) #name_list = [id]
+                if(i not in name_list):
+                        
+                    date = now.strftime("%d/%m/%Y")
+                    time = now.strftime("%H:%M:%S")
+                    f.writelines(f"\n{i},{r},{n},{d},{time},{date},{c},Present")
                 
-                date = now.strftime("%d/%m/%Y")
-                time = now.strftime("%H:%M:%S")
-                f.writelines(f"\n{i},{r},{n},{d},{time},{date},{c},Present")
 
     # ============== fetch data =========================
     def fetch_data(self,rows):
@@ -388,7 +428,8 @@ class Attendance :  #defining class
             self.AttendanceReportTable.insert("",END,values=i)
 
     def importCsv(self):
-        global mydata
+        #global mydata
+        mydata = []
         fln = filedialog.askopenfilename(initialdir="attendance/",title="Open CSV",filetypes=(("CSV File","*.csv"),("ALL File","*.*")),parent=self.root)
         with open(fln) as myfile:
             csvread  = csv.reader(myfile,delimiter=",")
@@ -398,7 +439,8 @@ class Attendance :  #defining class
             self.fetch_data(mydata)
 
     def todayCsv(self):
-        global mydata
+        #global mydata
+        mydata = []
         now = datetime.now()
         today = now.strftime("%d-%b-%Y")
         file_name = "attendance/"+today+".csv"
@@ -408,6 +450,25 @@ class Attendance :  #defining class
                 mydata.append(i)
             mydata.pop(0)  # this done cause first line 
             self.fetch_data(mydata)
+
+    #====================== get data from the table on click of row to update ================
+    def get_cursor(self,event=""):
+        cursor_focus = self.AttendanceReportTable.focus()
+        content = self.AttendanceReportTable.item(cursor_focus)
+        data = content["values"]
+
+        
+        
+        self.var_std_id.set(data[0])
+        self.var_roll.set(data[1])
+        self.var_std_name.set(data[2])
+        self.var_dep.set(data[3])
+        self.var_time.set(data[4])
+        self.var_date.set(data[5])
+        self.var_course.set(data[6])
+        self.var_attendance.set(data[7])
+        
+        
 
 
 

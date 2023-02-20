@@ -27,11 +27,15 @@ def face_recog():
             r = my_cursor.fetchone()
             r = "+".join(r)
 
+            i = str(id)
+            #i = "+".join(i)
+
             my_cursor.execute("select Dep from student where ID = "+str(id))
             d = my_cursor.fetchone()
             d = "+".join(d)
 
             if confidence > 77 :
+                cv2.putText(img,f"ID:{i}",(x,y-80),cv2.FONT_HERSHEY_COMPLEX,0.8,(255,255,255),3)
                 cv2.putText(img,f"Roll:{r}",(x,y-55),cv2.FONT_HERSHEY_COMPLEX,0.8,(255,255,255),3)
                 cv2.putText(img,f"Name:{n}",(x,y-30),cv2.FONT_HERSHEY_COMPLEX,0.8,(255,255,255),3)
                 cv2.putText(img,f"Department:{d}",(x,y-5),cv2.FONT_HERSHEY_COMPLEX,0.8,(255,255,255),3)
