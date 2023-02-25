@@ -421,7 +421,7 @@ class Student :  #defining class
         show_button = show_button.resize((show_button_width,show_button_height),Image.Resampling.LANCZOS)
         self.show_button = ImageTk.PhotoImage(show_button)
 
-        show_button_label = Button(right_frame,image=self.show_button,cursor="hand2",bd=0)
+        show_button_label = Button(right_frame,command=self.fetch_data,image=self.show_button,cursor="hand2",bd=0)
         show_button_label.grid(row=0,column=4)
 
         #search table frame

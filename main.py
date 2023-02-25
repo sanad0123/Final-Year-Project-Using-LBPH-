@@ -148,7 +148,7 @@ class Face_Recognition_System :  #defining class
         button8 = button8.resize((button_width,button_height),Image.Resampling.LANCZOS)
         self.button8 = ImageTk.PhotoImage(button8)
 
-        button_label_8 = Button(b_lbl,image=self.button8,cursor="hand2",bd=0)
+        button_label_8 = Button(b_lbl,command=self.exit,image=self.button8,cursor="hand2",bd=0)
         button8_xpos = (self.one_tenth_screen_width)*7
         button8_ypos = (background_height/11)*8
         button_label_8.place(x=button8_xpos,y=button8_ypos,width=button_width,height=button_height)
@@ -175,7 +175,17 @@ class Face_Recognition_System :  #defining class
 
     # ====================== Function for photos button ===================
     def open_img(self):
-         os.startfile("data")   
+         os.startfile("data")
+
+
+    # ===================== Function for exit ====================
+    def exit(self):
+        self.iexit = messagebox.askyesno("Exit","Are you sure you want to exit?",parent=self.root)
+        if self.iexit > 0:
+            self.root.destroy()
+        else :
+            return
+           
 
         
 

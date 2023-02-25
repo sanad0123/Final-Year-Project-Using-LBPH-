@@ -21,6 +21,7 @@ ROOT_DIR = str(os.path.abspath(os.curdir))  #finding and converting root directo
 IMG_DIR = ROOT_DIR + "/images"      #path of image directory
 
 mydata = []
+index = []
 
 
 class Attendance :  #defining class
@@ -248,7 +249,7 @@ class Attendance :  #defining class
         button_height = self.one_hundredth_background_height*16
 
         #button_1
-        button1_img_path = IMG_DIR + "/attendance.png"
+        button1_img_path = IMG_DIR + "/attendance_1.png"
         button1 = Image.open(button1_img_path)
         button1 = button1.resize((button_width,button_height),Image.Resampling.LANCZOS)
         self.button1 = ImageTk.PhotoImage(button1)
@@ -259,29 +260,29 @@ class Attendance :  #defining class
         button_label_1.place(x=button1_xpos,y=button1_ypos,width=button_width,height=button_height)
 
         #button_2
-        button2_img_path = IMG_DIR + "/update.png"
+        button2_img_path = IMG_DIR + "/update_1.png"
         button2 = Image.open(button2_img_path)
         button2 = button2.resize((button_width,button_height),Image.Resampling.LANCZOS)
         self.button2 = ImageTk.PhotoImage(button2)
 
-        button_label_2 = Button(b_lbl,image=self.button2,cursor="hand2",bd=0)
+        button_label_2 = Button(b_lbl,command=self.update_data,image=self.button2,cursor="hand2",bd=0)
         button2_xpos = self.one_sixteenth_screen_width*4
         button2_ypos = self.one_hundredth_background_height*85
         button_label_2.place(x=button2_xpos,y=button2_ypos,width=button_width,height=button_height)
 
         #button_3
-        button3_img_path = IMG_DIR + "/reset.png"
+        button3_img_path = IMG_DIR + "/reset_1.png"
         button3 = Image.open(button3_img_path)
         button3 = button3.resize((button_width,button_height),Image.Resampling.LANCZOS)
         self.button3 = ImageTk.PhotoImage(button3)
 
-        button_label_3 = Button(b_lbl,image=self.button3,cursor="hand2",bd=0)
+        button_label_3 = Button(b_lbl,command=self.reset_data,image=self.button3,cursor="hand2",bd=0)
         button3_xpos = self.one_sixteenth_screen_width*7
         button3_ypos = self.one_hundredth_background_height*85
         button_label_3.place(x=button3_xpos,y=button3_ypos,width=button_width,height=button_height)
 
         #button_4
-        button4_img_path = IMG_DIR + "/reset.png"
+        button4_img_path = IMG_DIR + "/import.png"
         button4 = Image.open(button4_img_path)
         button4 = button4.resize((button_width,button_height),Image.Resampling.LANCZOS)
         self.button4 = ImageTk.PhotoImage(button4)
@@ -293,12 +294,12 @@ class Attendance :  #defining class
 
         
         #button_5
-        button5_img_path = IMG_DIR + "/addphotosample.png"
+        button5_img_path = IMG_DIR + "/export.png"
         button5 = Image.open(button5_img_path)
         button5 = button5.resize((button_width,button_height),Image.Resampling.LANCZOS)
         self.button5 = ImageTk.PhotoImage(button5)
 
-        button_label_5 = Button(b_lbl,image=self.button5,cursor="hand2",bd=0)
+        button_label_5 = Button(b_lbl,command=self.exportCsv,image=self.button5,cursor="hand2",bd=0)
         button1_xpos = self.one_sixteenth_screen_width*13
         button1_ypos = self.one_hundredth_background_height*85
         button_label_5.place(x=button1_xpos,y=button1_ypos,width=button_width,height=button_height)
@@ -425,10 +426,11 @@ class Attendance :  #defining class
     def fetch_data(self,rows):
         self.AttendanceReportTable.delete(*self.AttendanceReportTable.get_children())
         for i in rows :
+            #i = ['12', '3', 'Chandan', 'CSIT', '22:29:55', '20/02/2023', 'Data mining', 'Present']
             self.AttendanceReportTable.insert("",END,values=i)
 
     def importCsv(self):
-        #global mydata
+        global mydata
         mydata = []
         fln = filedialog.askopenfilename(initialdir="attendance/",title="Open CSV",filetypes=(("CSV File","*.csv"),("ALL File","*.*")),parent=self.root)
         with open(fln) as myfile:
@@ -439,7 +441,7 @@ class Attendance :  #defining class
             self.fetch_data(mydata)
 
     def todayCsv(self):
-        #global mydata
+        global mydata
         mydata = []
         now = datetime.now()
         today = now.strftime("%d-%b-%Y")
@@ -457,6 +459,15 @@ class Attendance :  #defining class
         content = self.AttendanceReportTable.item(cursor_focus)
         data = content["values"]
 
+        selected_item = event.widget.selection()[0] # get the first selected item
+        global index
+        index = []
+        index = event.widget.index(selected_item) # get the index of the selected item
+        #print("Selected item:", selected_item)
+        #print("Index:", index)
+        #Selected item: I006
+        #Index: 0
+
         
         
         self.var_std_id.set(data[0])
@@ -467,6 +478,60 @@ class Attendance :  #defining class
         self.var_date.set(data[5])
         self.var_course.set(data[6])
         self.var_attendance.set(data[7])
+        
+
+    #================== Export button =================
+    def exportCsv(self):
+        global mydata
+        mydata.insert(0, []) #importing empty list at 1st position
+        try:
+            if len(mydata) < 1:
+                messagebox.showerror("No Data","No data found to export",parent=self.root)
+                return False
+            fln = filedialog.asksaveasfilename(initialdir="attendance/",title="Open CSV",filetypes=(("CSV File","*.csv"),("ALL File","*.*")),parent=self.root)
+
+            
+            with open(fln,mode="w",newline="") as myfile:
+                exp_write = csv.writer(myfile,delimiter=",")
+                for i in mydata:
+                    exp_write.writerow(i)
+                messagebox.showinfo("Data Export","Your data exported to folder attendance/ "+os.path.basename(fln))
+
+        except Exception as es:
+            messagebox.showerror("Error",f"Due to : {str(es)}",parent=self.root)
+
+    #===================== Reset  button =================
+    def reset_data(self):
+        self.var_std_id.set("")
+        self.var_roll.set("")
+        self.var_std_name.set("")
+        self.var_dep.set("")
+        self.var_time.set("")
+        self.var_date.set("")
+        self.var_course.set("")
+        self.var_attendance.set("Status")
+
+    #===================== Update button ==================
+    def update_data(self):
+        global index
+        global mydata
+        data = []
+        data.append(self.var_std_id.get())
+        data.append(self.var_roll.get())
+        data.append(self.var_std_name.get())
+        data.append(self.var_dep.get())
+        data.append(self.var_time.get())
+        data.append(self.var_date.get())
+        data.append(self.var_course.get())
+        data.append(self.var_attendance.get())
+        mydata[index] = data
+        self.fetch_data(mydata)
+        # self.AttendanceReportTable.insert("",index,values=data)
+        # self.AttendanceReportTable.delete(self.AttendanceReportTable.get_children()[index+1])
+        index = []
+        
+        
+
         
         
 
