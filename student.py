@@ -40,6 +40,9 @@ class Student :  #defining class
         self.var_phone = StringVar()
         self.var_address = StringVar()
         self.var_teacher = StringVar()
+
+        self.var_option = StringVar()
+        self.var_search_text = StringVar()
         
 
         # for responsive design
@@ -392,13 +395,13 @@ class Student :  #defining class
         search_by_label.grid(row=0,column=0,sticky=EW)
 
         #search option
-        search_combo = ttk.Combobox(right_frame,font=("times new roman",12,"bold"),state="readonly")
-        search_combo["values"] = ("Select Options","Roll No.","Student ID no.","Student name")
+        search_combo = ttk.Combobox(right_frame,textvariable=self.var_option,font=("times new roman",12,"bold"),state="readonly")
+        search_combo["values"] = ("Select Options","Roll No.","Student ID no.","Student name","Department","Year","Semester","Course")
         search_combo.current(0)
         search_combo.grid(row=0,column=1)
 
         #search entry field
-        stu_search_entry = ttk.Entry(right_frame,width=18,font=("times new roman",12,"bold"))
+        stu_search_entry = ttk.Entry(right_frame,textvariable=self.var_search_text,width=18,font=("times new roman",12,"bold"))
         stu_search_entry.grid(row=0,column=2)
 
         #Search button
@@ -409,7 +412,7 @@ class Student :  #defining class
         search_button = search_button.resize((search_button_width,search_button_height),Image.Resampling.LANCZOS)
         self.search_button = ImageTk.PhotoImage(search_button)
 
-        search_button_label = Button(right_frame,image=self.search_button,cursor="hand2",bd=0)
+        search_button_label = Button(right_frame,command=self.search,image=self.search_button,cursor="hand2",bd=0)
         search_button_label.grid(row=0,column=3)
 
 
@@ -828,6 +831,59 @@ class Student :  #defining class
 
             except Exception as es:
                 messagebox.showerror("Error",f"Due to : {str(es)}",parent=self.root)
+
+
+    # =============== function for search ===================================
+    def search(self):
+        option = self.var_option.get()
+        #print(self.var_option.get())
+        search_text = self.var_search_text.get()
+        #print(self.var_search_text.get())
+        if (option == "Select Options" and search_text == ""):
+            messagebox.showerror("Error",f"Enter both fields",parent=self.root)
+        elif (option != "Select Options" and search_text == ""):
+            messagebox.showerror("Error",f"Enter second field",parent=self.root)
+        elif (option == "Select Options" and search_text != ""):
+            messagebox.showerror("Error",f"Enter first field",parent=self.root)
+        else :
+            conn = mysql.connector.connect(host="localhost",username=ps.username,password=ps.password,database=ps.db)
+            my_cursor = conn.cursor()
+            if (option == "Student ID no."):
+                my_cursor.execute("select * from student where ID = " + search_text )
+                data = my_cursor.fetchall()
+            elif (option == "Roll No."):
+                my_cursor.execute("select * from student where Roll = " + search_text )
+                data = my_cursor.fetchall()
+            elif (option == "Student name"):
+                my_cursor.execute(f"select * from student where Name like '%{search_text}%'")
+                data = my_cursor.fetchall()
+            elif (option == "Department"):
+                my_cursor.execute(f"select * from student where Dep like '%{search_text}%'")
+                data = my_cursor.fetchall()
+            elif (option == "Year"):
+                my_cursor.execute("select * from student where Year = " + search_text )
+                data = my_cursor.fetchall()
+            
+            elif (option == "Course"):
+                my_cursor.execute(f"select * from student where Course like '%{search_text}%'")
+                data = my_cursor.fetchall()
+            elif (option == "Semester"):
+                my_cursor.execute("select * from student where Sem = %s", [search_text] )
+                data = my_cursor.fetchall()
+
+            if len(data) != 0:
+                self.search_table.delete(*self.search_table.get_children())
+                for i in data:
+                    self.search_table.insert("",END,values=i)
+                conn.commit()
+            else:
+                messagebox.showerror("Error",f"No data found",parent=self.root)
+                self.search_table.delete(*self.search_table.get_children())
+            conn.close()
+
+
+
+
             
 
 
