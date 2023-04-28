@@ -14,7 +14,12 @@ import csv
 from tkinter import filedialog
 import mysql.connector
 import face_recognition as f_r
+import numpy as np
+import lbph_algo as la
 
+myObj = la.LBPHFaceRecognizer(1,8,8,8)
+myObj.histograms = np.load('histograms.npy')
+myObj.labels = np.load('labels.npy')
 
 
 ROOT_DIR = str(os.path.abspath(os.curdir))  #finding and converting root directory path into string
@@ -313,16 +318,16 @@ class Attendance :  #defining class
             open(file_name, 'w').close()
         else:
             os.remove(file_name)
-        def draw_boundary(img,classifier,scaleFactor,minNeighbors,clf):
+        def draw_boundary(img,classifier,scaleFactor,minNeighbors):
             gray_image = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
             features = classifier.detectMultiScale(gray_image,scaleFactor,minNeighbors)
 
-            coord = []
+        
 
             for (x,y,w,h) in features:
                 cv2.rectangle(img,(x,y),(x+w,y+h),(0,255,0),3)
-                id,predict = clf.predict(gray_image[y:y+h,x:x+w])
-                confidence = int((100*(1-predict/300)))
+                id,pred = myObj.predict(gray_image[y:y+h,x:x+w])
+                confidence = int((1000*(pred)))
 
                 conn = mysql.connector.connect(host="localhost",username=ps.username,password=ps.password,database=ps.db)
                 my_cursor = conn.cursor()
@@ -331,13 +336,15 @@ class Attendance :  #defining class
                 n = my_cursor.fetchone()
                 n = "+".join(n)
 
-                
-                i = str(id)
-                #i = "+".join(i)
-
                 my_cursor.execute("select Roll from student where ID = "+str(id))
                 r = my_cursor.fetchone()
                 r = "+".join(r)
+                
+
+                
+
+                i = str(id)
+                #i = "+".join(i)
 
                 my_cursor.execute("select Course from student where ID = "+str(id))
                 c = my_cursor.fetchone()
@@ -347,7 +354,10 @@ class Attendance :  #defining class
                 d = my_cursor.fetchone()
                 d = "+".join(d)
 
-                if confidence > 77 :
+                
+
+                
+                if confidence > 90 :
                     cv2.putText(img,f"Course:{c}",(x,y-100),cv2.FONT_HERSHEY_COMPLEX,0.8,(255,255,255),3)
                     cv2.putText(img,f"ID:{i}",(x,y-80),cv2.FONT_HERSHEY_COMPLEX,0.8,(255,255,255),3)
                     cv2.putText(img,f"Roll:{r}",(x,y-55),cv2.FONT_HERSHEY_COMPLEX,0.8,(255,255,255),3)
@@ -357,25 +367,20 @@ class Attendance :  #defining class
                 else:
                     cv2.rectangle(img,(x,y),(x+w,y+h),(0,0,255),3)
                     cv2.putText(img,"Unknown face",(x,y-5),cv2.FONT_HERSHEY_COMPLEX,0.8,(255,255,255),3)
-
-                coord = [x,y,w,h]
-
-            return coord
-        
-        def recognize(img,clf,faceCascade):
-            coord = draw_boundary(img,faceCascade,1.1,10,clf)
+                
+        def recognize(img,faceCascade):
+            draw_boundary(img,faceCascade,1.1,10)
             return img
-        
+    
         faceCascade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
-        clf = cv2.face.LBPHFaceRecognizer_create()
-        clf.read("classifier.xml")
+        
 
         cap = cv2.VideoCapture(0)
 
         while True:
             ret,img = cap.read()
-            img = recognize(img,clf,faceCascade)
-            cv2.imshow("Taking Attendance & press e to exit",img)
+            img = recognize(img,faceCascade)
+            cv2.imshow("Welcome to face recognition & press e to exit",img)
             if cv2.waitKey(1) == 101: #value of e; enter e to exit
                 break
         cap.release()
