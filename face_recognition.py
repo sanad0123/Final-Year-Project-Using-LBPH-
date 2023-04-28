@@ -9,11 +9,12 @@ import project_standard as ps
 
 
 
-myObj = la.LBPHFaceRecognizer(1,8,8,8)
-myObj.histograms = np.load('histograms.npy')
-myObj.labels = np.load('labels.npy')
+
 
 def face_recog():
+    myObj = la.LBPHFaceRecognizer(1,8,8,8)
+    myObj.histograms = np.load('histograms.npy')
+    myObj.labels = np.load('labels.npy')
     def draw_boundary(img,classifier,scaleFactor,minNeighbors):
         gray_image = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
         features = classifier.detectMultiScale(gray_image,scaleFactor,minNeighbors)

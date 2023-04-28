@@ -17,9 +17,7 @@ import face_recognition as f_r
 import numpy as np
 import lbph_algo as la
 
-myObj = la.LBPHFaceRecognizer(1,8,8,8)
-myObj.histograms = np.load('histograms.npy')
-myObj.labels = np.load('labels.npy')
+
 
 
 ROOT_DIR = str(os.path.abspath(os.curdir))  #finding and converting root directory path into string
@@ -314,6 +312,9 @@ class Attendance :  #defining class
         now = datetime.now()
         today = now.strftime("%d-%b-%Y")
         file_name = "attendance/"+today+".csv"
+        myObj = la.LBPHFaceRecognizer(1,8,8,8)
+        myObj.histograms = np.load('histograms.npy')
+        myObj.labels = np.load('labels.npy')
         if not os.path.isfile(file_name):
             open(file_name, 'w').close()
         else:
